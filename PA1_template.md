@@ -9,7 +9,8 @@ output:
 
 In this section the data is read.
 
-```{r echo=TRUE}
+
+```r
 data<-read.csv("activity.csv",sep=",")
 ```
 
@@ -17,7 +18,8 @@ data<-read.csv("activity.csv",sep=",")
 
 In this section the mean and median of the total number of steps per day is calculated and the total number of steps taken each day is plotted.
 
-```{r echo=TRUE}
+
+```r
 library(ggplot2)
 list<- sapply(split(data$steps,data$date),sum,na.rm=TRUE)
 df <- data.frame(names(list),list)
@@ -27,20 +29,24 @@ median0 <- median(df$list,na.rm=TRUE)
 
 g<-ggplot(df,aes(x=names.list.,y=list)) + geom_bar(stat="sum")+xlab("Day")+ylab("Steps")
 print(g)
-
 ```
 
-The mean of the total number of steps taken per day is `r mean0` and the median is `r median0`
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
+The mean of the total number of steps taken per day is 9354.2295082 and the median is 10395
 
 ## What is the average daily activity pattern?
 
 In this section the code graphs the daily activity pattern
 
-```{r echo=TRUE}
+
+```r
 list2 <- sapply(split(data$steps,data$interval),mean,na.rm=TRUE)
 df2 <- data.frame(names(list2),list2)
 with(df2,plot(names.list2.,list2,xlab = "5 Minute-interval",ylab="Mean Steps",type="l",main="Mean steps every 5 Minutes"))
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
 The five interval that has the maximum mean is 830-835 minutes, which is around 1:00 pm.
 
@@ -48,8 +54,29 @@ The five interval that has the maximum mean is 830-835 minutes, which is around 
 
 In this section the missing values are evaluated.
 
-```{r echo=TRUE}
+
+```r
 library(dplyr)
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
 library(ggplot2)
 na <- sum(is.na(data$steps))
 mean2 <- mean(data$steps,na.rm=TRUE)
@@ -63,16 +90,18 @@ median1 <- median(df1$list1,na.rm=TRUE)
 
 g1<-ggplot(df1,aes(x=names.list1.,y=list1)) + geom_bar(stat="sum")+xlab("Day")+ylab("Steps")
 print(g1)
-
 ```
 
-The total missing values are `r na`  The new set, with no missing values has a mean equal to `r mean1` and the median is equal to `r median1`  The value of the mean is the same as in the previous data set. The median is different by 1.19 units.
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
+The total missing values are 2304  The new set, with no missing values has a mean equal to 1.0766189\times 10^{4} and the median is equal to 1.0766189\times 10^{4}  The value of the mean is the same as in the previous data set. The median is different by 1.19 units.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
 In this section the activity patterns between weekdays and weekends is analyzed.
 
-```{r echo=TRUE}
+
+```r
 library(stringr)
 data1$date<-as.Date(data1$date)
 weekdays <- c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
@@ -90,5 +119,6 @@ g2 <-  filter(df3,df3$Week=="Weekday")
 par(mfrow=c(2,1))
 with(g1,plot(Interval,Mean,type="l",main="Weekend"))
 with(g2,plot(Interval,Mean,type="l",main="Weekdays"))
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
